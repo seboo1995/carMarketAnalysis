@@ -2,8 +2,6 @@ scraper/.ipynb_checkpoints
 temp
 scraper/config_app.ini
 BlaBla.csv
-scraper/gebrauctwagen/gebrauchtWagen_config.ini
-scraper/gebrauctwagen/gebrauctwagen_scraper.py
 .gitignore
 scraper/__pycache__/sqliteHandler.cpython-310.pyc
 scraper/gebrauctwagen/__pycache__/gebrauctwagen_scraper.cpython-310.pyc
