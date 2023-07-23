@@ -5,3 +5,4 @@ BlaBla.csv
 .gitignore
 scraper/__pycache__/sqliteHandler.cpython-310.pyc
 scraper/gebrauctwagen/__pycache__/gebrauctwagen_scraper.cpython-310.pyc
+scraper/utils/*.cpython.pyc
