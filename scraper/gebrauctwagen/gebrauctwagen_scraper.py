@@ -1,37 +1,17 @@
-import configparser
 import requests
 import time
-from bs4 import BeautifulSoup
 import pandas as pd
 import os
 from datetime import datetime
-
-# prepare env
-
-
-
-
-SECTIONS = ['css_selectors','options']
-
-
-
-def load_config_params() -> dict:
-    params:dict = {}
-    config = configparser.ConfigParser()
-    config.read('scraper/gebrauctwagen/gebrauchtWagen_config.ini')
-    sections = config.sections()
-    for section in SECTIONS:
-        if section not in sections:
-            raise ValueError(f'Missing sections: {section}')
-    params['css_selectors'] = dict(config['css_selectors'])
-    params['options'] = dict(config['options'])
-    return params
+from bs4 import BeautifulSoup
+from utils.utils import load_config_params
 
 
 class GebrauchtWagenScraper:
     def __init__(self):
         self.params = load_config_params()
         self.res_list = []
+    
     
     def _create_requests(self):
         '''
@@ -47,12 +27,17 @@ class GebrauchtWagenScraper:
             if response.status_code != 200:
                 raise ValueError(f'Status code for page{str(i)} was {response.status_code}')
                 continue
-            soup = BeautifulSoup(response.text)
+            soup = BeautifulSoup(response.text,features='html')
             responses_list.append(soup)
             time.sleep(timeout)
         return responses_list
     
+    
     def get_data_from_responeses(self):
+        '''
+        Converts the soups to 
+        
+        '''
         responses_soups = self._create_requests()
         css_selectors = self.params['css_selectors']
         temp_path = self.params['options']['temp_path']
@@ -71,7 +56,9 @@ class GebrauchtWagenScraper:
         if  not os.path.exists(temp_path):
             os.mkdir(temp_path)
 
-        df.to_csv(f'{os.path.join(temp_path,self.make_fileName())}')
+        df.to_csv(f'{os.path.join(temp_path,self.make_fileName())}',index=False)
         return f'{os.path.join(temp_path,self.make_fileName())}'
+    
+    
     def make_fileName(self):
         return datetime.now().strftime('%d-%b-%y') +'.csv'
